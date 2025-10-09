@@ -1,0 +1,9 @@
+node_modules/
+notifications.db
+.env
+.DS_Store
+*.log
+*.sqlite
+dist/
+coverage/
+*.local

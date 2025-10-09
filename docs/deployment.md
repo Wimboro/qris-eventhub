@@ -16,6 +16,16 @@ QRIS EventHub can run in traditional Node.js environments or on Cloudflare Worke
 3. Run `node server.js` or `npm start`.
 4. Configure reverse proxy (nginx, Caddy) for HTTPS termination and rate limiting.
 
+### Docker Compose Quickstart
+```bash
+export API_KEY=change-me
+docker compose up -d
+docker compose logs -f qris-eventhub
+```
+- Default bind: `localhost:3000`; override with `PORT` env variable.
+- Data persistence: `qris-eventhub-data` named volume (`docker volume inspect qris-eventhub-data`).
+- Optional nginx reverse proxy available via `docker compose --profile production up -d` once `nginx.conf` and TLS assets exist.
+
 ## 2. Cloudflare Workers
 
 - **Use case**: Serverless edge runtime with managed SQLite-compatible storage (D1).

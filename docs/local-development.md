@@ -86,19 +86,25 @@ curl -H "X-API-Key: local-dev-key" \
 - **Database locked**: occurs if multiple processes access the same SQLite file. Stop extra instances or use separate working directories for concurrent tests.
 - **SSL requirements**: when integrating with WooCommerce locally, consider using a tunneling tool (ngrok, Cloudflare Tunnel) to expose a secure URL.
 
-## Docker Option
+## Docker & Compose
 
-Run inside a container for parity with production:
+### Standalone Container
 ```bash
 docker build -t qris-eventhub .
-docker run --rm -p 3000:3000 --env-file .env qris-eventhub
-```
-
-Persist the database by mounting a volume:
-```bash
 docker run --rm -p 3000:3000 \
-  --env-file .env \
+  -e API_KEY=change-me \
+  -e DB_PATH=/app/data/notifications.db \
   -v $(pwd)/data:/app/data \
   qris-eventhub
 ```
-Update `server.js` to point to `/app/data/notifications.db` if using a mounted volume.
+
+### Docker Compose
+The included `docker-compose.yml` provisions the app with a persistent named volume and health checks.
+```bash
+export API_KEY=change-me
+docker compose up -d
+docker compose logs -f qris-eventhub
+```
+- Service listens on `localhost:3000`; override by setting `PORT` before running compose.
+- Data lives in the `qris-eventhub-data` volume (inspect with `docker volume ls`).
+- Start the optional nginx proxy via `docker compose --profile production up -d`.

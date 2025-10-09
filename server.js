@@ -4,12 +4,14 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const fs = require('fs');
 const qrisIntegration = require('./qris-integration');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const API_KEY = process.env.API_KEY || 'your-secret-api-key';
+const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'notifications.db');
 
 // Middleware
 app.use(helmet());
@@ -18,8 +20,12 @@ app.use(morgan('combined'));
 app.use(express.json({ limit: '10mb' }));
 
 // Initialize SQLite database
-const dbPath = path.join(__dirname, 'notifications.db');
-const db = new sqlite3.Database(dbPath);
+try {
+    fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
+} catch (err) {
+    console.error('Failed to ensure database directory exists:', err);
+}
+const db = new sqlite3.Database(DB_PATH);
 
 // Create tables
 db.serialize(() => {

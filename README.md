@@ -34,6 +34,17 @@ Backend service for collecting Android notifications, storing them in SQLite, an
 
 Optional: `docker-compose.yml` and `Dockerfile` are provided for container deployments; set environment variables in the compose file or runtime environment.
 
+### Run with Docker Compose
+```bash
+export API_KEY=change-me          # required; used by clients
+docker compose up -d              # builds and starts qris-eventhub + optional nginx profile
+# tail logs
+docker compose logs -f qris-eventhub
+```
+- The service binds to `localhost:3000` by default (`PORT` can be overridden via environment).
+- Notification data persists in the named volume `qris-eventhub-data`.
+- Enable the reverse proxy with `docker compose --profile production up -d`.
+
 ## API Overview
 | Purpose | Method & Path | Notes |
 |---------|---------------|-------|

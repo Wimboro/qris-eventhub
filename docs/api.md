@@ -479,18 +479,24 @@ The server logs include additional diagnostic information for operators.
 
 ## Sample Workflows
 
-1. **Generate QR & monitor payment**
+1. **Convert static QR & verify notification trail**
+   - Backend operator calls `POST /qris/convert` with a static QR and base amount.
+   - Customer scans the dynamic QR code and completes payment using their banking app.
+   - Android listener forwards the push notification to `POST /webhook`.
+   - Admin UI queries `/notifications` (e.g., `GET /notifications?limit=20&offset=0`) and matches `amount_detected` with the combined amount returned by `/qris/convert`.
+
+2. **Generate QR & monitor payment**
    - `POST /qris/generate-for-order`
-   - Customer pays using the QR code.
+   - Customer pays using the generated QR code.
    - Android listener sends notification to `/webhook`.
    - WooCommerce polls `/woocommerce/payment-status/:orderRef` until the status is `completed`.
 
-2. **Manual reconciliation**
+3. **Manual reconciliation**
    - Look up the assigned suffix via `/qris/unique-amount/:orderRef`.
    - Confirm amount with `/woocommerce/confirm-amount/:orderRef/:expectedAmount`.
    - Inspect raw notifications using `/notifications`.
 
-3. **Operational dashboard**
+4. **Operational dashboard**
    - Monitor uptime with `/health`.
    - Display aggregated stats (`/stats`) and device health (`/devices`).
 

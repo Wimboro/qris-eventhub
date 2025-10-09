@@ -74,12 +74,21 @@ Tables are provisioned automatically on startup; schema is documented in `schema
 ## Troubleshooting
 - Ensure the Android client sends `deviceId` and `packageName`; missing fields result in `400`.
 - SQLite locking issues usually stem from concurrent writers—restart the service or move to an external database if needed.
-- For Cloudflare D1-specific issues or deployment guidance, consult `README-CLOUDFLARE.md`.
+- For Cloudflare D1-specific issues or deployment guidance, consult `docs/deployment-cloudflare.md`.
 
 ## Next Steps
 - Connect the Android Notification Listener app to `/webhook` and monitor `/notifications`.
 - Integrate WooCommerce by pointing the plugin to this backend and supplying matching API keys.
 - When ready for serverless deployment, follow the Cloudflare guide to run the Worker version.
+
+## Additional Documentation
+- Detailed docs live under `docs/`:
+  - `docs/index.md` – full table of contents.
+  - `docs/architecture.md` – module breakdown and data flow.
+  - `docs/api.md` – endpoint reference with payload examples.
+  - `docs/local-development.md` – environment setup, commands, and troubleshooting.
+  - `docs/deployment.md` – hosting strategies and operational guidance.
+  - `docs/deployment-cloudflare.md` – Worker-specific steps and best practices.
 | `API_KEY` | API authentication key | `your-secret-api-key` |
 | `DB_PATH` | SQLite database path | `./notifications.db` |
 
